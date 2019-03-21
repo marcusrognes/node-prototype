@@ -3,6 +3,24 @@ const nodeExternals = require('webpack-node-externals');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+function getSafeEnvVariables(env) {
+	let safeEnv = {};
+
+	Object.keys(env).forEach(key => {
+		if (key.indexOf('REACT_APP') === 0) {
+			safeEnv[key] = env[key];
+		}
+	});
+
+	const envKeys = Object.keys(safeEnv).reduce((prev, next) => {
+		prev[`process.env.${next}`] = JSON.stringify(env[next]);
+
+		return prev;
+	}, {});
+
+	return envKeys;
+}
+
 const sharedConfig = {
 	resolve: {
 		alias: {
@@ -85,6 +103,7 @@ module.exports = [
 				template: './assets/index.html',
 			}),
 			new webpack.HotModuleReplacementPlugin(),
+			new webpack.DefinePlugin(getSafeEnvVariables(process.env)),
 		],
 	},
 ];
