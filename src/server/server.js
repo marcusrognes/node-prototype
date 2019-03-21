@@ -16,6 +16,8 @@ function StartServer() {
 		const staticContext = await CreateContext();
 		const apolloServer = new ApolloServer({
 			schema,
+			introspection: true,
+			playground: true,
 			formatError: error => {
 				Error.captureStackTrace(error);
 
@@ -32,7 +34,7 @@ function StartServer() {
 	})();
 
 	const server = app.listen(port, () =>
-		console.log(`Example app listening on port ${port}!`),
+		console.log(`Server started on port ${port}!`),
 	);
 
 	return {
