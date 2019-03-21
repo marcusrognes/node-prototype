@@ -26,6 +26,7 @@ const sharedConfig = {
 
 module.exports = [
 	{
+		devtool: 'sourcemap',
 		entry: './src/cli/index.js',
 		output: {
 			path: path.resolve(__dirname, 'dist/cli'),
@@ -39,9 +40,15 @@ module.exports = [
 				banner: '#!/usr/bin/env node',
 				raw: true,
 			}),
+			new webpack.BannerPlugin({
+				banner: 'require("source-map-support").install();',
+				raw: true,
+				entryOnly: false,
+			}),
 		],
 	},
 	{
+		devtool: 'sourcemap',
 		entry: {
 			index: './src/server/index.js',
 			server: './src/server/server.js',
@@ -55,9 +62,17 @@ module.exports = [
 			exclude: ['./src/server/server.js'],
 		}),
 		target: 'node',
+		plugins: [
+			new webpack.BannerPlugin({
+				banner: 'require("source-map-support").install();',
+				raw: true,
+				entryOnly: false,
+			}),
+		],
 		...sharedConfig,
 	},
 	{
+		devtool: 'inline-source-map',
 		entry: ['./src/client/index.js'],
 		output: {
 			path: path.resolve(__dirname, 'dist/client'),
