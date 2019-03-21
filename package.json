@@ -11,7 +11,7 @@
 		"cli": "node -r dotenv/config dist/cli/index.js",
 		"client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
 		"server": "nodemon --exec \"node -r dotenv/config\" src/server/index.js",
-		"dev": "npm-run-all -p server client"
+		"dev": "node -r dotenv/config scripts/dev.js "
 	},
 	"devDependencies": {
 		"@babel/core": "^7.4.0",
@@ -24,7 +24,8 @@
 		"nodemon": "^1.18.10",
 		"npm-run-all": "^4.1.5",
 		"webpack": "^4.29.6",
-		"webpack-cli": "^3.3.0"
+		"webpack-cli": "^3.3.0",
+		"webpack-dev-server": "^3.2.1"
 	},
 	"dependencies": {
 		"express": "^4.16.4",

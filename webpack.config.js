@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const sharedConfig = {
 	resolve: {
@@ -41,33 +42,34 @@ module.exports = [
 		],
 	},
 	{
-		entry: './src/server/index.js',
+		entry: {
+			index: './src/server/index.js',
+			server: './src/server/server.js',
+		},
 		output: {
 			path: path.resolve(__dirname, 'dist/server'),
-			filename: 'index.js',
+			filename: '[name].js',
+			libraryTarget: 'commonjs',
 		},
-		externals: nodeExternals(),
+		externals: nodeExternals({
+			exclude: ['./src/server/server.js'],
+		}),
 		target: 'node',
 		...sharedConfig,
-		devServer: {
-			port: 4000,
-			open: true,
-		},
 	},
 	{
-		entry: './src/client/index.js',
+		entry: ['./src/client/index.js'],
 		output: {
 			path: path.resolve(__dirname, 'dist/client'),
 			filename: 'index.js',
 		},
 		target: 'web',
 		...sharedConfig,
-		devServer: {
-			port: 3000,
-			open: true,
-			proxy: {
-				'/graphql': 'http://localhost:4000/graphql',
-			},
-		},
+		plugins: [
+			new HtmlWebpackPlugin({
+				template: './assets/index.html',
+			}),
+			new webpack.HotModuleReplacementPlugin(),
+		],
 	},
 ];
