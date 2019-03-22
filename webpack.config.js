@@ -23,7 +23,6 @@ function getSafeEnvVariables(env) {
 }
 
 const sharedConfig = {
-	stats: 'errors-only',
 	resolve: {
 		alias: {
 			cli: path.resolve(__dirname, 'src/cli/'),

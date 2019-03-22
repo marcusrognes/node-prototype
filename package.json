@@ -9,7 +9,7 @@
 		"build": "webpack --mode production",
 		"start": "node -r dotenv/config dist/server/index.js",
 		"cli": "node -r dotenv/config dist/cli/index.js",
-		"dev": "webpack-dashboard -- node -r dotenv/config scripts/dev.js "
+		"dev": "node -r dotenv/config scripts/dev.js "
 	},
 	"devDependencies": {
 		"@babel/core": "^7.4.0",
