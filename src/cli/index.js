@@ -1,1 +1,1 @@
-console.log('CLI BUILT YA!');
+console.log('CLI');

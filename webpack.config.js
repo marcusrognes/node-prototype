@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const DashboardPlugin = require('webpack-dashboard/plugin');
 
 function getSafeEnvVariables(env) {
 	let safeEnv = {};
@@ -22,6 +23,7 @@ function getSafeEnvVariables(env) {
 }
 
 const sharedConfig = {
+	stats: 'errors-only',
 	resolve: {
 		alias: {
 			cli: path.resolve(__dirname, 'src/cli/'),
@@ -54,15 +56,16 @@ module.exports = [
 		externals: nodeExternals(),
 		target: 'node',
 		plugins: [
-			new webpack.BannerPlugin({
-				banner: '#!/usr/bin/env node',
-				raw: true,
-			}),
+			// new webpack.BannerPlugin({
+			// 	banner: '#!/usr/bin/env node',
+			// 	raw: true,
+			// }),
 			new webpack.BannerPlugin({
 				banner: 'require("source-map-support").install();',
 				raw: true,
 				entryOnly: false,
 			}),
+			new DashboardPlugin(),
 		],
 	},
 	{
@@ -86,6 +89,7 @@ module.exports = [
 				raw: true,
 				entryOnly: false,
 			}),
+			new DashboardPlugin(),
 		],
 		...sharedConfig,
 	},
@@ -104,6 +108,7 @@ module.exports = [
 			}),
 			new webpack.HotModuleReplacementPlugin(),
 			new webpack.DefinePlugin(getSafeEnvVariables(process.env)),
+			new DashboardPlugin(),
 		],
 	},
 ];
