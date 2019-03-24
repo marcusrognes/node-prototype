@@ -101,6 +101,12 @@ module.exports = [
 		},
 		target: 'web',
 		...sharedConfig,
+		optimization: {
+			splitChunks: {
+				// include all types of chunks
+				chunks: 'all',
+			},
+		},
 		plugins: [
 			new HtmlWebpackPlugin({
 				template: './assets/index.html',
