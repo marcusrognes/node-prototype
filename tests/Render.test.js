@@ -1,9 +1,19 @@
-describe('Google', () => {
+const { StartServer } = require('../dist/server/server');
+
+var server = null;
+
+describe('Server with react', () => {
 	beforeAll(async () => {
-		await page.goto('https://google.com');
+		({server} = await StartServer());
+
+		await page.goto('http://localhost:4000');
 	});
 
-	it('should display "google" text on page', async () => {
-		await expect(page).toMatch('google');
+	afterAll(async () => {
+		await server.close();
+	}, 3000);
+
+	it('should display "Index.js" text on page', async () => {
+		await expect(page).toMatch('Index.js');
 	});
 });
