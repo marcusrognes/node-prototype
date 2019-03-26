@@ -3,11 +3,12 @@ const WebpackDevServer = require('webpack-dev-server');
 const nodemon = require('nodemon');
 const [cliConfig, serverConfig, clientConfig] = require('../webpack.config');
 
-function StartDev() {
-	let serverObject = null;
+const PORT = process.env.PORT || 3000;
+const SERVER_PORT = process.env.SERVER_PORT || PORT + 10;
 
+function StartDev() {
 	const cliCompiler = webpack(cliConfig);
-	const cliWatcher = cliCompiler.watch(
+	cliCompiler.watch(
 		{
 			aggregateTimeout: 300,
 		},
@@ -17,7 +18,7 @@ function StartDev() {
 	);
 
 	const serverCompiler = webpack(serverConfig);
-	const serverWatcher = serverCompiler.watch(
+	serverCompiler.watch(
 		{
 			aggregateTimeout: 300,
 		},
@@ -27,22 +28,22 @@ function StartDev() {
 	);
 
 	clientConfig.entry.unshift(
-		'webpack-dev-server/client?http://localhost:3000/',
+		`webpack-dev-server/client?http://localhost:${PORT}/`,
 		'webpack/hot/dev-server',
 	);
 
 	const clientCompiler = webpack(clientConfig);
 	const clientDevServer = new WebpackDevServer(clientCompiler, {
 		proxy: {
-			'/graphql': 'http://localhost:4000',
+			'/graphql': `http://localhost:${SERVER_PORT}`,
 		},
 		noInfo: true,
 		hot: true,
 		inline: true,
 	});
 
-	clientDevServer.listen(3000, 'localhost', () => {
-		console.log('Starting server on http://localhost:3000');
+	clientDevServer.listen(PORT, 'localhost', () => {
+		console.log(`Starting server on http://localhost:${PORT}`);
 	});
 }
 

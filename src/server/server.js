@@ -5,7 +5,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { CreateContext } from 'server/context';
 import schema from 'server/schema';
 
-const port = process.env.PORT || 4000;
+const port = process.env.SERVER_PORT || process.env.PORT || 4000;
 
 function StartServer() {
 	const app = express();
