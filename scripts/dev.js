@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
+const nodemon = require('nodemon');
 const [cliConfig, serverConfig, clientConfig] = require('../webpack.config');
 
 function StartDev() {
@@ -22,23 +23,6 @@ function StartDev() {
 		},
 		(err, stats) => {
 			console.log(`SERVER:\n${stats}\n\n`);
-
-			if (serverObject) {
-				serverObject.close();
-			}
-
-			delete require.cache[require.resolve('../dist/server/server')];
-
-			const { StartServer } = require('../dist/server/server');
-
-			if (StartServer) {
-				console.log('Starting server');
-				try {
-					({ server: serverObject } = StartServer());
-				} catch (error) {
-					console.error(`SERVER: [ERROR]\n${error}`);
-				}
-			}
 		},
 	);
 
@@ -61,5 +45,10 @@ function StartDev() {
 		console.log('Starting server on http://localhost:3000');
 	});
 }
+
+nodemon({
+	script: 'dist/server/index.js',
+	ext: 'js json',
+});
 
 StartDev();

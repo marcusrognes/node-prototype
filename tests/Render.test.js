@@ -4,7 +4,7 @@ var server = null;
 
 describe('Server with react', () => {
 	beforeAll(async () => {
-		({server} = await StartServer());
+		({ server } = await StartServer());
 
 		await page.goto('http://localhost:4000');
 	});
