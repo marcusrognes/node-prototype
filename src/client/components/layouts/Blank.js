@@ -5,10 +5,10 @@ const Wrapper = styled.div`
 	position: fixed;
 	top: 0;
 	right: 0;
-	bottom: 0;
 	left: 0;
+	bottom: 0;
 `;
 
-export default function AppLayout({ children }) {
-	return <Wrapper>{children}</Wrapper>;
+export default function BlankLayout({ children, ...props }) {
+	return <Wrapper {...props}>{children}</Wrapper>;
 }
