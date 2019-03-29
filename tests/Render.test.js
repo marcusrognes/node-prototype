@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const { StartServer } = require('../dist/server/server');
 
 var server = null;
