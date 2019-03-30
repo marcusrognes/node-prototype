@@ -14,9 +14,7 @@ describe('Server with react', () => {
 	});
 
 	afterAll(async () => {
-		console.log('After all');
-		let res = server.close();
-		console.log('res', res);
+		server.close();
 	}, 3000);
 
 	it('should display "Login" text on page', async () => {
