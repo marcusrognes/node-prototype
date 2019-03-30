@@ -9,15 +9,13 @@
 		"build": "webpack --mode production",
 		"start": "node -r dotenv/config dist/server/index.js",
 		"cli": "node -r dotenv/config dist/cli/index.js",
-		"test": "",
-		"test:eun": "npm-run-all -s build test:jest",
+		"test": "npm-run-all -s build test:jest",
 		"test:jest": "jest --detectOpenHandles",
 		"dev": "node -r dotenv/config scripts/dev.js "
 	},
 	"husky": {
 		"hooks": {
-			"pre-commit": "lint-staged",
-			"pre-push": "yarn test"
+			"pre-commit": "lint-staged"
 		}
 	},
 	"lint-staged": {
