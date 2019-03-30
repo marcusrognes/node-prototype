@@ -26,7 +26,33 @@ function StartServer() {
 			},
 			context: async ({ req }) => ({
 				...staticContext,
+				user: req.user,
 			}),
+		});
+
+		app.use(function(req, res, next) {
+			const token = (req.header('Authorization') || '').replace(
+				'Bearer ',
+				'',
+			);
+			let tokenObject = '';
+			if (!token) {
+				return next();
+			}
+
+			try {
+				tokenObject = staticContext.JWTVerify(token);
+			} catch (error) {
+				console.error(error);
+			}
+
+			if (!tokenObject) {
+				return next();
+			}
+
+			req.user = tokenObject.user;
+
+			return next();
 		});
 
 		apolloServer.applyMiddleware({ app });
