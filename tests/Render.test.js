@@ -15,7 +15,7 @@ describe('Server with react', () => {
 
 	afterAll(async () => {
 		console.log('After all');
-		let res = await server.close();
+		let res = server.close();
 		console.log('res', res);
 	}, 3000);
 
