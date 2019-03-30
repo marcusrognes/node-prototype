@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import React, { Component, Suspense } from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -34,7 +35,7 @@ const theme = createMuiTheme({
 		secondary: { main: process.env.REACT_APP_COLOR_SECONDARY || '#ff8a65' },
 	},
 	typography: { useNextVariants: true },
-	logoUrl: process.env.REACT_APP_LOGO_URL || LogoUrl ||'/React-icon.svg',
+	logoUrl: process.env.REACT_APP_LOGO_URL || LogoUrl || '/React-icon.svg',
 	background: '#eeeeee',
 	border: '1px solid rgba(0, 0, 0, 0.12)',
 }); // @see: https://material.io/tools/color/#!/?view.left=0&view.right=0&primary.color=64B5F6&secondary.color=FF8A65

@@ -35,7 +35,8 @@ function StartServer() {
 				'Bearer ',
 				'',
 			);
-			let tokenObject = '';
+			let tokenObject = {};
+
 			if (!token) {
 				return next();
 			}

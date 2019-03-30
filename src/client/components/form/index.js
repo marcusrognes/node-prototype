@@ -59,8 +59,6 @@ export default function Form({
 		return { errors, values };
 	}
 
-	console.log('Render form');
-
 	return (
 		<form
 			onSubmit={e => {

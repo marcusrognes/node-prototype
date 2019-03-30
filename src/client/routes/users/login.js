@@ -1,12 +1,13 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import styled, { withTheme } from 'styled-components';
+import gql from 'graphql-tag';
 
 import BlankLayout from 'client/components/layouts/Blank';
-import Form from 'client/components/form/index';
 import TextField from 'client/components/form/TextField';
 import ScrollPane from 'client/components/ScrollPane';
 import SubmitButton from 'client/components/form/SubmitButton';
+import MutationForm from 'client/components/util/MutationForm';
 
 const Wrapper = styled(ScrollPane)`
 	text-align: center;
@@ -60,9 +61,31 @@ export default function Login() {
 					>
 						<Grid item>
 							<h1>Login</h1>
-							<Form
-								onSubmit={values => {
-									console.log(values);
+							<MutationForm
+								mutation={gql`
+									mutation login(
+										$email: String!
+										$password: String!
+									) {
+										login(
+											email: $email
+											password: $password
+										) {
+											token
+											user {
+												_id
+												name
+												email
+											}
+										}
+									}
+								`}
+								afterMutation={(error, values) => {
+									if (error) {
+										console.error(error);
+									}
+									//TODO: Set token.
+									console.log(values.login.token);
 								}}
 							>
 								<TextField
@@ -81,7 +104,7 @@ export default function Login() {
 
 								<SubmitButton fullWidth>Login</SubmitButton>
 								<a href="#">Glemt passord</a>
-							</Form>
+							</MutationForm>
 						</Grid>
 					</StyledGrid>
 				</StyledGrid>
