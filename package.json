@@ -9,7 +9,8 @@
 		"build": "webpack --mode production",
 		"start": "node -r dotenv/config dist/server/index.js",
 		"cli": "node -r dotenv/config dist/cli/index.js",
-		"test": "npm-run-all -s build test:jest",
+		"test": "",
+		"test:eun": "npm-run-all -s build test:jest",
 		"test:jest": "jest --detectOpenHandles",
 		"dev": "node -r dotenv/config scripts/dev.js "
 	},
