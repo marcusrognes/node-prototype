@@ -1,7 +1,19 @@
 {
 	"error": {
 		"user": {
-			"emailPassword": "Feil e-post eller passord"
+			"emailPassword": "Feil e-post eller passord",
+			"emailExists": "En bruker med den e-posten eksisterer allerede",
+			"notLoggedIn": "Du må være logget inn for å gjøre dette",
+			"notFound": "Ingen bruker funnet",
+			"weakPassword": "Passordet må være sterkere! {{issues}}",
+			"passwordMissing": "Passord mangler",
+			"passwordIssues": {
+				"digits": "trenger minst ett tall",
+				"min": "trenger 8 eller flere tegn",
+				"max": "trenger å være på mindre en 100 tegn",
+				"uppercase": "trenger store bokstaver",
+				"lowercase": "trenger små bokstaver"
+			}
 		}
 	}
 }

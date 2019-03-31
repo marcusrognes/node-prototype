@@ -9,16 +9,18 @@ function getJWTUserObject(user) {
 }
 
 async function hashUserPassword(_, args, doc, context) {
-	const { PasswordHash, PasswordValidate } = context;
+	const { PasswordHash, PasswordValidate, t } = context;
 
 	if (doc.password) {
 		const passwordIssues = PasswordValidate(doc.password);
 
 		if (passwordIssues.length !== 0) {
 			throw new Error(
-				`Password must be stronger!, missing ${passwordIssues.join(
-					',',
-				)}`,
+				t('error.user.weakPassword', {
+					issues: passwordIssues
+						.map(issue => t('error.user.passwordIssues.' + issue))
+						.join(', '),
+				}),
 			);
 		}
 
@@ -95,19 +97,24 @@ const UsersModule = {
 		},
 		Mutation: {
 			insertOneUser: async (_, args, context) => {
-				const { Users } = context;
+				const { Users, t } = context;
 				const {
 					password,
 					name,
 					email,
 					language,
 				} = await hashUserPassword(_, args, args, context);
+
+				if (!password) {
+					throw new Error(t('error.user.missingPassword'));
+				}
+
 				const existingUser = await Users.findOne({
 					email,
 				});
 
 				if (existingUser) {
-					throw new Error('A user with that email already exists');
+					throw new Error(t('error.user.emailExists'));
 				}
 
 				const results = await Users.insertOne({
@@ -120,7 +127,7 @@ const UsersModule = {
 				return results.ops[0];
 			},
 			updateOneUser: async (_, args, context) => {
-				const { Users } = context;
+				const { Users, t } = context;
 				const {
 					_id,
 					password,
@@ -137,7 +144,7 @@ const UsersModule = {
 				});
 
 				if (existingUser) {
-					throw new Error('A user with that email already exists');
+					throw new Error(t('error.user.emailExists'));
 				}
 
 				let $set = {};
@@ -168,7 +175,7 @@ const UsersModule = {
 				);
 
 				if (updateReturn.matchedCount === 0) {
-					throw new Error('That user do not exist');
+					throw new Error(t('error.user.notFound'));
 				}
 
 				return await Users.findOne({
@@ -176,7 +183,7 @@ const UsersModule = {
 				});
 			},
 			updateMyProfile: async (_, args, context) => {
-				const { Users, JWTSign } = context;
+				const { Users, JWTSign, t } = context;
 				const {
 					password,
 					email,
@@ -187,7 +194,7 @@ const UsersModule = {
 				let { user } = context;
 
 				if (!user) {
-					throw new Error('User must be logged in to do that');
+					throw new Error(t('error.user.notLoggedIn'));
 				}
 
 				const existingUser = await Users.findOne({
@@ -195,7 +202,7 @@ const UsersModule = {
 				});
 
 				if (existingUser) {
-					throw new Error('A user with that email already exists');
+					throw new Error(t('error.user.emailExists'));
 				}
 
 				let $set = {};

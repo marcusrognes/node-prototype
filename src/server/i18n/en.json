@@ -1,7 +1,19 @@
 {
 	"error": {
 		"user": {
-			"emailPassword": "Wrong email or password"
+			"emailPassword": "Wrong email or password",
+			"emailExists": "A user with that email already exists",
+			"notLoggedIn": "User must be logged in to do that",
+			"notFound": "User not found",
+			"weakPassword": "Password must be stronger! {{issues}}",
+			"missingPassword": "Password is missing",
+			"passwordIssues": {
+				"digits": "need at leas one number",
+				"min": "need 8 or more characters",
+				"max": "need less than 100 characters",
+				"uppercase": "need uppercase letters",
+				"lowercase": "need lowercase letters"
+			}
 		}
 	}
 }
