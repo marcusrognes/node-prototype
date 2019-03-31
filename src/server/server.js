@@ -24,10 +24,27 @@ function StartServer() {
 
 				return error;
 			},
-			context: async ({ req }) => ({
-				...staticContext,
-				user: req.user,
-			}),
+			context: async ({ req }) => {
+				let user = req.user || {};
+				let acceptLanguage = req.header('Accept-Language');
+				if (acceptLanguage) {
+					acceptLanguage = acceptLanguage.split(',').map(lang => {
+						return lang.split(';')[0];
+					})[0];
+				}
+
+				let language = user.language || acceptLanguage || 'en';
+
+				let languageT =
+					staticContext.languagesT[language] ||
+					staticContext.languagesT.en;
+
+				return {
+					...staticContext,
+					user: req.user,
+					t: languageT,
+				};
+			},
 		});
 
 		app.use(function(req, res, next) {

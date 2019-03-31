@@ -1,10 +1,4 @@
-import {
-	insertOne,
-	updateOne,
-	deleteOne,
-	paginate,
-	findOne,
-} from 'server/context/resolvers';
+import { deleteOne, paginate, findOne } from 'server/context/resolvers';
 
 function getJWTUserObject(user) {
 	return {
@@ -38,7 +32,8 @@ const UsersModule = {
 	typeDefs: `
         type User inherits Document {
             name: String
-            email: String
+			email: String
+			language: Language
         }
 
 		type LoginReturn {
@@ -61,10 +56,11 @@ const UsersModule = {
         }
 
         extend type Mutation {
-                insertOneUser(
+			insertOneUser(
                 name: String!
                 email: String!
-                password: String!
+				password: String!
+				language: Language
             ): User
 
             updateOneUser(
@@ -72,6 +68,7 @@ const UsersModule = {
                 name: String
                 email: String
                 password: String
+				language: Language
             ): User @auth(scope:"users:write")
 
             deleteOneUser(
@@ -87,6 +84,7 @@ const UsersModule = {
 				name: String
 				email: String
 				password: String
+				language: Language
 			): LoginReturn
         }
     `,
@@ -98,12 +96,12 @@ const UsersModule = {
 		Mutation: {
 			insertOneUser: async (_, args, context) => {
 				const { Users } = context;
-				const { password, name, email } = await hashUserPassword(
-					_,
-					args,
-					args,
-					context,
-				);
+				const {
+					password,
+					name,
+					email,
+					language,
+				} = await hashUserPassword(_, args, args, context);
 				const existingUser = await Users.findOne({
 					email,
 				});
@@ -116,18 +114,20 @@ const UsersModule = {
 					name,
 					email,
 					password,
+					language: language || 'nb',
 				});
 
 				return results.ops[0];
 			},
 			updateOneUser: async (_, args, context) => {
 				const { Users } = context;
-				const { _id, password, email, name } = await hashUserPassword(
-					_,
-					args,
-					args,
-					context,
-				);
+				const {
+					_id,
+					password,
+					email,
+					name,
+					language,
+				} = await hashUserPassword(_, args, args, context);
 
 				const existingUser = await Users.findOne({
 					email,
@@ -154,6 +154,10 @@ const UsersModule = {
 					$set.email = email;
 				}
 
+				if (language) {
+					$set.language = language;
+				}
+
 				const updateReturn = await Users.updateOne(
 					{
 						_id,
@@ -173,12 +177,12 @@ const UsersModule = {
 			},
 			updateMyProfile: async (_, args, context) => {
 				const { Users, JWTSign } = context;
-				const { password, email, name } = await hashUserPassword(
-					_,
-					args,
-					args,
-					context,
-				);
+				const {
+					password,
+					email,
+					name,
+					language,
+				} = await hashUserPassword(_, args, args, context);
 
 				let { user } = context;
 
@@ -204,6 +208,10 @@ const UsersModule = {
 					$set.name = name;
 				}
 
+				if (language) {
+					$set.language = language;
+				}
+
 				await Users.updateOne(
 					{
 						_id: user._id,
@@ -227,7 +235,7 @@ const UsersModule = {
 			},
 			deleteOneUser: deleteOne('Users'),
 			login: async (_, args, context) => {
-				const { PasswordCompare, Users, JWTSign } = context;
+				const { PasswordCompare, Users, JWTSign, t } = context;
 				const { email, password } = args;
 				const user = await Users.findOne({
 					email,
@@ -235,18 +243,18 @@ const UsersModule = {
 				let isLoggedIn = false;
 
 				if (!user) {
-					throw new Error('Wrong email / password.');
+					throw new Error(t('error.user.emailPassword'));
 				}
 
 				try {
 					isLoggedIn = PasswordCompare(password, user.password);
 				} catch (error) {
 					console.error(error);
-					throw new Error('Wrong email / password.');
+					throw new Error(t('error.user.emailPassword'));
 				}
 
 				if (!isLoggedIn) {
-					throw new Error('Wrong email / password.');
+					throw new Error(t('error.user.emailPassword'));
 				}
 
 				return {

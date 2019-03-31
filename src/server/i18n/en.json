@@ -1,0 +1,7 @@
+{
+	"error": {
+		"user": {
+			"emailPassword": "Wrong email or password"
+		}
+	}
+}
