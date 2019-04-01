@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -23,7 +23,33 @@ export const Languages = {
 };
 
 const Flag = styled.img`
-	width: 32px;
+	width: 16px;
+	float: right;
+	${({ label }) =>
+		label &&
+		css`
+			margin: 5px 10px 0 0;
+		`}
+`;
+
+const StyledLabelMenuItem = styled.div`
+	position: absolute;
+	display: block;
+    box-sizing: content-box;
+	text-align: left;
+	top: 0;
+    bottom: 0;
+	left: 0;
+	width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+    line-height: 24px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    font-weight: 400;
+    padding-top: 17px;
+    padding-bottom: 11px;
+}
 `;
 
 export default function LanguageSelector({
@@ -39,15 +65,14 @@ export default function LanguageSelector({
 
 	return (
 		<FormControl {...props} variant="filled">
+			<StyledLabelMenuItem>
+				{Languages.nb.label} <Flag label src={Languages.nb.flagUrl} />
+			</StyledLabelMenuItem>
 			<Select
 				open={open}
 				onClose={() => setOpen(false)}
 				onOpen={() => setOpen(true)}
-				value={
-					<MenuItem>
-						{Languages.nb.label} <Flag src={Languages.nb.flagUrl} />
-					</MenuItem>
-				}
+				value={value}
 				onChange={(e, value) => {
 					onChange(value.props.value);
 				}}
