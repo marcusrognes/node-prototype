@@ -8,6 +8,7 @@ import TextField from 'client/components/form/TextField';
 import ScrollPane from 'client/components/ScrollPane';
 import SubmitButton from 'client/components/form/SubmitButton';
 import MutationForm from 'client/components/util/MutationForm';
+import { SelectLanguage } from 'client/components/util/LanguageSelector';
 
 const Wrapper = styled(ScrollPane)`
 	text-align: center;
@@ -28,6 +29,17 @@ const Logo = styled(
 	withTheme(({ theme, ...props }) => <img {...props} src={theme.logoUrl} />),
 )`
 	width: 150px;
+`;
+
+const StyledSelectLanguage = styled(SelectLanguage)`
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	width: 150px;
+`;
+
+const FormWrapper = styled.div`
+	position: relative;
 `;
 
 export default function Login() {
@@ -60,51 +72,56 @@ export default function Login() {
 						item
 					>
 						<Grid item>
-							<h1>Login</h1>
-							<MutationForm
-								mutation={gql`
-									mutation login(
-										$email: String!
-										$password: String!
-									) {
-										login(
-											email: $email
-											password: $password
+							<FormWrapper>
+								<h1>Login</h1>
+
+								<StyledSelectLanguage />
+
+								<MutationForm
+									mutation={gql`
+										mutation login(
+											$email: String!
+											$password: String!
 										) {
-											token
-											user {
-												_id
-												name
-												email
+											login(
+												email: $email
+												password: $password
+											) {
+												token
+												user {
+													_id
+													name
+													email
+												}
 											}
 										}
-									}
-								`}
-								afterMutation={(error, values) => {
-									if (error) {
-										console.error(error);
-									}
-									//TODO: Set token.
-									console.log(values.login.token);
-								}}
-							>
-								<TextField
-									name="email"
-									type="email"
-									label="E-post"
-									required
-								/>
+									`}
+									afterMutation={(error, values) => {
+										if (error) {
+											console.error(error);
+										}
+										//TODO: Set token.
+										console.log(values.login.token);
+									}}
+								>
+									<TextField
+										name="email"
+										type="email"
+										label="E-post"
+										required
+									/>
 
-								<TextField
-									name="password"
-									type="password"
-									label="Passord"
-									required
-								/>
+									<TextField
+										name="password"
+										type="password"
+										label="Passord"
+										required
+									/>
 
-								<SubmitButton fullWidth>Login</SubmitButton>
-								<a href="#">Glemt passord</a>
-							</MutationForm>
+									<SubmitButton fullWidth>Login</SubmitButton>
+									<a href="#">Glemt passord</a>
+								</MutationForm>
+							</FormWrapper>
 						</Grid>
 					</StyledGrid>
 				</StyledGrid>
